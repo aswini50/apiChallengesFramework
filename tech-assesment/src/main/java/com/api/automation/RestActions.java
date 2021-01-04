@@ -1,8 +1,10 @@
 package com.api.automation;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.api.automation.testNG.HeartbeatTest;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.specification.AuthenticationSpecification;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 
@@ -111,9 +114,34 @@ public class RestActions {
 		}
 		// Adding a branch for Delete Method
 		else if (requestMethod.toUpperCase().equals("DELETE")) {
-			deleteRequest(param_id, id);
+			deleteRequest();
 		}
+		// Adding Patch method
+		else if (requestMethod.toUpperCase().equals("PATCH")) {
+			patchRequest();
+		}
+		/*
+		 * // Adding Trace Method else if
+		 * (requestMethod.toUpperCase().equals("TRACE")) { traceRequest(); }
+		 */
 
+		// TODO Ask Alan about Trace Request
+		/*
+		 * public Response traceRequest() { try { response = request.
+		 * System.out.println("Response: " + response.asString()); } catch
+		 * (Exception e) { throw e; }return response;
+		 */
+
+	}
+
+	public Response patchRequest() {
+		try {
+			response = request.patch();
+			System.out.println("Response: " + response.asString());
+		} catch (Exception e) {
+			throw e;
+		}
+		return response;
 	}
 
 	/**
@@ -125,6 +153,22 @@ public class RestActions {
 
 		try {
 			response = request.pathParam(param_id, id).delete();
+			System.out.println("Response: " + response.asString());
+		} catch (Exception e) {
+			throw e;
+		}
+		return response;
+	}
+
+	/**
+	 * Method Overload Peform a Delete Request for the request Specification
+	 *
+	 * @return
+	 */
+	public Response deleteRequest() {
+
+		try {
+			response = request.delete();
 			System.out.println("Response: " + response.asString());
 		} catch (Exception e) {
 			throw e;
@@ -158,7 +202,7 @@ public class RestActions {
 
 		try {
 			response = request.pathParam(param_id, id).post();
-			System.out.println("Response: " + response.asString());
+			// System.out.println("Response: " + response.asString());
 		} catch (Exception e) {
 			throw e;
 		}
@@ -364,6 +408,7 @@ public class RestActions {
 		}
 		return jPath;
 	}
+
 	/**
 	 * Get Headers form Response by Name
 	 *
@@ -378,5 +423,35 @@ public class RestActions {
 			throw e;
 		}
 		return header;
+	}
+
+	public void setupAuthentication(String authType) {
+		try {
+			AuthenticationSpecification authenticationSpecification = request.auth();
+			switch (authType.toUpperCase()) {
+			case "BASIC":
+				authenticationSpecification.basic("admin", "password");// TODO :
+																		// Get
+																		// this
+																		// value
+																		// from
+																		// config
+																		// file
+				break;
+			case "OAUTH2":
+				authenticationSpecification.oauth2("accessToken");
+				break;
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public void addMultipleHeaders(Map<String, String> headers) {
+		try {
+			request.headers(headers);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }
