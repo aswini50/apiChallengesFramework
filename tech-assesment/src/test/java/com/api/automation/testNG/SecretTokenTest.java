@@ -15,7 +15,6 @@ public class SecretTokenTest extends BaseTest {
 		basePath = ApiChallengerUtil.props.getProperty("secret.token.base.path");
 		try {
 			restActions.setBasePath(basePath);
-			restActions.addHeader(challengerId);
 			restActions.setupAuthentication("basic");
 			restActions.performRequest("post");
 			statusCode = restActions.getStatusCode();

@@ -18,10 +18,8 @@ public class ToDosTest extends BaseTest {
 	public void getToDos() {
 		basePath = ApiChallengerUtil.props.getProperty("todos.base.path");
 		try {
-
 			restActions.setBaseURI(baseUri);
 			restActions.setBasePath(basePath);
-			restActions.addHeader(challengerId);
 			restActions.performRequest("get");
 			statusCode = restActions.getStatusCode();
 			System.out.println(statusCode);
@@ -39,9 +37,7 @@ public class ToDosTest extends BaseTest {
 		try {
 			basePath = ApiChallengerUtil.props.getProperty("param.todos.base.path").replace("{id}", toDoId);
 
-			restActions.setBaseURI(baseUri);
 			restActions.setBasePath(basePath);
-			restActions.addHeader(challengerId);
 			restActions.performRequest("get");
 			System.out.println(restActions.getStatusCode());
 			System.out.println(restActions.getResponseAsString());
@@ -57,9 +53,7 @@ public class ToDosTest extends BaseTest {
 		try {
 			requestBody = jsonUtil.getRequestBodyJSONString("requestbody", "post_todo_reqbody");
 
-			restActions.setBaseURI(baseUri);
 			restActions.setBasePath(basePath);
-			// restActions.addHeader(challengerId);
 			restActions.addRequestBody(requestBody);
 			restActions.performRequest("post");
 			statusCode = restActions.getStatusCode();
@@ -80,9 +74,7 @@ public class ToDosTest extends BaseTest {
 
 		try {
 			updateBody = jsonUtil.getRequestBodyJSONString("requestbody", "partial_update_todo_reqbody");
-			restActions.setBaseURI(baseUri);
 			restActions.setBasePath(basePath);
-			// restActions.addHeader(challengerId);
 			restActions.addRequestBody(updateBody);
 			restActions.postRequest("id", toDoId);
 			System.out.println(restActions.getStatusCode());
@@ -98,9 +90,7 @@ public class ToDosTest extends BaseTest {
 		basePath = ApiChallengerUtil.props.getProperty("param.todos.base.path");
 		try {
 
-			restActions.setBaseURI(baseUri);
 			restActions.setBasePath(basePath);
-			// restActions.addHeader(challengerId);
 			restActions.deleteRequest("id", toDoId);
 			System.out.println(restActions.getStatusCode());
 			System.out.println(restActions.getResponseAsString());
